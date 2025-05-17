@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ian Holt Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        margin: 0;
+        background: #181818;
+        color: #f5f5f5;
+    }
+    header {
+        background: linear-gradient(190deg, #8a1515 50%, #d32f2f 100%); /* deep red */
+        color: #fff;
+        padding: 2em 0 1em 0;
+        text-align: center;
+    }
+    nav {
+        background:linear-gradient(-190deg, #8a1515 50%, #d32f2f 100%); /* strong red */
+        padding: 0.5em 0;
+        text-align: center;
+    }
+    nav a {
+        color: #fff;
+        margin: 0 1em;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+    nav a:hover {
+        color: #ffd6d6;
+        text-decoration: underline;
+    }
+    main {
+        max-width: 800px;
+        margin: 2em auto;
+        background: #232323;
+        border-radius: 10px;
+        box-shadow: 0 0px 0px #9b9b9b40;
+        padding: 2em;
+    }
+    section { margin-bottom: 2em; }
+    h1, h2 { margin-top: 0; color: #ffffff; }
+    .projects-list { list-style: none; padding: 0; }
+    .projects-list li { margin-bottom: 1em; }
+    .project-title { font-weight: bold; color: #ffffff; }
+    form { margin-top: 1em; }
+    textarea {
+        width: 100%;
+        max-width: 770px;
+        min-width: 200px;
+        min-height: 100px;
+        padding: 0.75em 1em;
+        border: none;
+        font-size: 1.05em;
+        background: #181818;
+        color: #fff;
+        resize: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        box-shadow: 0 0px 32px #91919120, 0 0px 6px #cfcfcf10;
+    }
+    textarea:focus {
+        outline: none;
+        box-shadow: 0 0px 8px #97979780;
+        background: #232323;
+        color: #ffff;
+    }
+    #automation-result {
+        background: #181818;
+        border: none;
+        padding: 1em;
+        margin-top: 1em;
+        white-space: pre-wrap;
+        border-radius: 4px;
+        box-shadow: 0 0px 32px #91919120, 0 0px 6px #cfcfcf10;
+        min-height: 120px;
+        color: #fff;
+    }
+    #automation-result pre {
+        white-space: pre-wrap;
+        word-break: break-all;
+        font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+        font-size: 1em;
+        background: #232323;
+        border-radius: 6px;
+        padding: 1em;
+        margin: 0;
+        color: #ffd6d6;
+        box-shadow: 0 2px 8px #d32f2f20;
+    }
+    #automation-result .log-section {
+        margin-bottom: 1.2em;
+    }
+    #automation-result .log-title {
+        color: #ffd6d6;
+        font-weight: bold;
+        font-size: 1.08em;
+        margin-bottom: 0.2em;
+        display: block;
+    }
+    #automation-result .log-url {
+        color: #fff;
+        font-weight: bold;
+        margin-bottom: 0.1em;
+        display: block;
+    }
+    #automation-result .log-pass {
+        color: #aaffaa !important;
+        font-weight: 500;
+        font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    }
+    #automation-result .log-fail {
+        color: #ff8888 !important;
+        font-weight: 500;
+        font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    }
+    #automation-result .log-link {
+        color: #ffd6d6;
+        font-size: 0.98em;
+        margin-left: 1.2em;
+        display: block;
+        white-space: normal; /* allow wrapping */
+        word-break: break-all; /* break long URLs */
+        font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    }
+    #automation-result .log-title.links-passed {
+        color: #aaffaa !important;
+    }
+    #automation-result .log-title.links-failed {
+        color: #ff8888 !important;
+    }
+    #automation-result .section-passed {
+        color: #aaffaa !important;
+    }
+    #automation-result .section-failed {
+        color: #ff8888 !important;
+    }
+    #automation-result .log-label {
+        font-weight: bold;
+        font-size: 1.01em;
+        margin-left: 0.5em;
+        margin-bottom: 0.1em;
+        display: block;
+    }
+    #automation-result .log-label.pass {
+        color: #aaffaa;
+    }
+    #automation-result .log-label.fail {
+        color: #ff8888;
+    }
+    footer {
+        text-align: center;
+        color: #ffb3b3;
+        padding: 2em 0 1em 0;
+    }
+    @media (max-width: 600px) {
+    main { padding: 1em; }
+    }
+    button {
+        background: #b71c1c;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 0.1em 0.70em;
+        font-size: 1.05em;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 2px 8px #d32f2f40;
+        transition: background 0.2s, box-shadow 0.2s, transform 0.1s, color 0.2s;
+        margin-top: 0.5em;
+    }
+    button:hover, button:focus {
+        background: #b71c1c;
+        color: #fff;
+        box-shadow: 0 4px 16px #d32f2f80;
+        transform: translateY(-2px) scale(1.03);
+        outline: none;
+    }
+    #contact a {
+        color: #ffd6d6; 
+        transition: color 0.2s;
+    }
+    #contact a:hover,
+    #contact a:focus {
+        color: #d32f2f;
+        text-decoration: underline;
+    }
+    label[for="urls"] {
+        display: inline-block;
+        margin-bottom: 0.5em;
+    }
+    #download-log-btn {
+        background: #232323;
+        color: #ffd6d6;
+        border: 1px solid #b71c1c;
+        border-radius: 6px;
+        padding: 0.3em 1.2em;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 1em;
+        margin-top: 0.5em;
+        box-shadow: 0 2px 8px #d32f2f20;
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    #download-log-btn:hover, #download-log-btn:focus {
+        background: #b71c1c;
+        color: #fff;
+        box-shadow: 0 4px 16px #d32f2f80;
+        outline: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ian Holt UI QA/QC Automation</h1>
+    <p>Automation Engineer &amp; Developer</p>
+  </header>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#automation">Automation Demo</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <main>
+    <section id="about">
+      <h2>About Me</h2>
+      <p>
+        Hi! I'm Ian, a passionate automation engineer and developer. I specialize in building robust automation solutions using Playwright, Node.js, and modern web technologies.
+      </p>
+    </section>
+    <section id="projects">
+      <h2>Projects</h2>
+      <ul class="projects-list">
+        <li>
+          <span class="project-title">Automated Accessibility Checker with Axe-Core</span><br>
+          <span>A powerful automation script that analyzes any URL you enter below using Axe-core’s accessibility engine, automatically detecting and reporting accessibility issues to help ensure your site is usable by everyone. End-to-end web automation using Playwright and Node.js.</span>
+        </li>
+        <li>
+          <span class="project-title">Essintial User Flow Test</span><br>
+          <span>An automation script that clicks every link on the landing page to check if all urls are in working order. Test will fail if loading takes to long or the page goes "404 not found". Test takes advantage of Playwright and Node.js</span>
+        </li>
+      </ul>
+    </section>
+    <section id="automation">
+      <h2>Automation Demo</h2>
+      <form id="automation-form">
+        <label for="urls">Enter URLs (one per line):</label><br>
+        <textarea id="urls" name="urls" rows="5" placeholder="https://example.com&#10;https://another.com"></textarea><br><br>
+        <button type="submit">Run Automation</button>
+      </form>
+      <button id="download-log-btn" style="display:none;">Download Log</button>
+      <div id="automation-result"></div>
+      <p style="color: #888; font-size: 0.95em;">
+        (Note: This demo runs Playwright automation on the backend.)
+      </p>
+    </section>
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>
+        Email: <a href="mailto:ianholt839@gmail.com">ianholt839@gmail.com</a><br>
+        LinkedIn: <a href="https://www.linkedin.com/in/ian-holt-584576232/" target="_blank">Ian Holt</a>
+      </p>
+    </section>
+  </main>
+  <footer>
+    &copy; 2025 Ian Holt Portfolio
+  </footer>
+  <script>
+    function formatLog(log) {
+      // New format: per-URL blocks, no section headers
+      const lines = log.split('\n');
+      let html = '';
+      lines.forEach(line => {
+        if (/^https?:\/\//.test(line.trim())) {
+          html += `<span class='log-url'>${escapeHtml(line.trim())}</span>`;
+        } else if (/^\s*Title:/.test(line)) {
+          const isPass = line.includes('passed');
+          html += `<span class='log-title' style='color:${isPass ? '#aaffaa' : '#ff8888'};'>${escapeHtml(line.trim())}</span>`;
+        } else if (/^\s*Links passed:/i.test(line)) {
+          html += `<span class='log-label pass'>Links passed:</span>`;
+        } else if (/^\s*Links failed:/i.test(line)) {
+          html += `<span class='log-label fail'>Links failed:</span>`;
+        } else if (/^\s*\[PASS\]/.test(line)) {
+          html += `<span class='log-link log-pass'>${escapeHtml(line.trim())}</span>`;
+        } else if (/^\s*\[FAIL\]/.test(line)) {
+          html += `<span class='log-link log-fail'>${escapeHtml(line.trim())}</span>`;
+        } else if (line.trim() === '') {
+          html += '<br>';
+        }
+      });
+      return html;
+    }
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, function(tag) {
+        const charsToReplace = {
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        };
+        return charsToReplace[tag] || tag;
+      });
+    }
+    document.getElementById('automation-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const urls = document.getElementById('urls').value
+        .split('\n')
+        .map(u => u.trim())
+        .filter(u => u);
+      const resultDiv = document.getElementById('automation-result');
+      const downloadBtn = document.getElementById('download-log-btn');
+      resultDiv.textContent = 'Running automation...';
+      downloadBtn.style.display = 'none';
+      try {
+        const res = await fetch('/run-playwright', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ urls })
+        });
+        const data = await res.json();
+        if (data.log) {
+          resultDiv.innerHTML = formatLog(data.log);
+          downloadBtn.style.display = '';
+          downloadBtn.onclick = function() {
+            const blob = new Blob([data.log], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'automation-log.txt';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            }, 100);
+          };
+        } else {
+          resultDiv.innerHTML = '<pre>' + (data.error || 'No log') + '</pre>';
+        }
+      } catch (err) {
+        resultDiv.textContent = 'Error: ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
