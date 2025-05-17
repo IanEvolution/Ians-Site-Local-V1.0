@@ -150,6 +150,77 @@
     #automation-result .log-label.fail {
         color: #ff8888;
     }
+    #accessibility-result {
+        background: #181818;
+        border: none;
+        padding: 1em;
+        margin-top: 1em;
+        white-space: pre-wrap;
+        border-radius: 4px;
+        box-shadow: 0 0px 32px #91919120, 0 0px 6px #cfcfcf10;
+        min-height: 120px;
+        color: #fff;
+    }
+    #accessibility-result pre {
+        white-space: pre-wrap;
+        word-break: break-all;
+        font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+        font-size: 1em;
+        background: #232323;
+        border-radius: 6px;
+        padding: 1em;
+        margin: 0;
+        color: #ffd6d6;
+        box-shadow: 0 2px 8px #d32f2f20;
+    }
+    #accessibility-result .log-section {
+        margin-bottom: 1.2em;
+    }
+    #accessibility-result .log-title {
+        color: #ffd6d6;
+        font-weight: bold;
+        font-size: 1.08em;
+        margin-bottom: 0.2em;
+        display: block;
+    }
+    #accessibility-result .log-url {
+        color: #fff;
+        font-weight: bold;
+        margin-bottom: 0.1em;
+        display: block;
+    }
+    #accessibility-result .log-pass {
+        color: #aaffaa !important;
+        font-weight: 500;
+        font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    }
+    #accessibility-result .log-fail {
+        color: #ff8888 !important;
+        font-weight: 500;
+        font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    }
+    #accessibility-result .log-link {
+        color: #ffd6d6;
+        font-size: 0.98em;
+        margin-left: 1.2em;
+        display: block;
+        white-space: normal; /* allow wrapping */
+        word-break: break-all; /* break long URLs */
+        font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    }
+    #accessibility-result .log-label {
+        font-weight: bold;
+        font-size: 1.01em;
+        margin-left: 0.5em;
+        margin-bottom: 0.1em;
+        display: block;
+    }
+    #accessibility-result .log-label.pass {
+        color: #aaffaa;
+    }
+    #accessibility-result .log-label.fail {
+        color: #ff8888;
+    }
     footer {
         text-align: center;
         color: #ffb3b3;
@@ -211,6 +282,11 @@
         box-shadow: 0 4px 16px #d32f2f80;
         outline: none;
     }
+    #accessibility-form label[for="access-urls"] {
+        margin-top: 0.5em;
+        margin-bottom: 0.2em;
+        display: inline-block;
+    }
   </style>
 </head>
 <body>
@@ -235,17 +311,17 @@
       <h2>Projects</h2>
       <ul class="projects-list">
         <li>
-          <span class="project-title">Automated Accessibility Checker with Axe-Core</span><br>
-          <span>A powerful automation script that analyzes any URL you enter below using Axe-core’s accessibility engine, automatically detecting and reporting accessibility issues to help ensure your site is usable by everyone. End-to-end web automation using Playwright and Node.js.</span>
-        </li>
-        <li>
           <span class="project-title">Essintial User Flow Test</span><br>
           <span>An automation script that clicks every link on the landing page to check if all urls are in working order. Test will fail if loading takes to long or the page goes "404 not found". Test takes advantage of Playwright and Node.js</span>
+        </li>
+        <li>
+          <span class="project-title">Automated Accessibility Checker with Axe-Core</span><br>
+          <span>A powerful automation script that analyzes any URL you enter below using Axe-core’s accessibility engine, automatically detecting and reporting accessibility issues to help ensure your site is usable by everyone. End-to-end web automation using Playwright and Node.js.</span>
         </li>
       </ul>
     </section>
     <section id="automation">
-      <h2>Automation Demo</h2>
+      <h2>Essential User Flow Check</h2>
       <form id="automation-form">
         <label for="urls">Enter URLs (one per line):</label><br>
         <textarea id="urls" name="urls" rows="5" placeholder="https://example.com&#10;https://another.com"></textarea><br><br>
@@ -255,6 +331,20 @@
       <div id="automation-result"></div>
       <p style="color: #888; font-size: 0.95em;">
         (Note: This demo runs Playwright automation on the backend.)
+      </p>
+    </section>
+    <section id="accessibility">
+      <h2>Accessibility Checker</h2>
+      <form id="accessibility-form">
+        <label for="access-urls">Enter URLs (one per line):</label><br>
+        <textarea id="access-urls" name="access-urls" rows="5" placeholder="https://example.com\nhttps://another.com"></textarea><br><br>
+        <button type="submit">Run Accessibility Check</button>
+      </form>
+      <button id="download-access-log-btn" style="display:none;">Download Accessibility Report</button>
+      <div id="accessibility-result"></div>
+      <p style="color: #888; font-size: 0.95em;">
+        (Note: This runs an Axe-core accessibility audit using Playwright on the backend.)<br>
+        <span style="color:#ff8888;">Some sites (like YouTube, Google, Facebook, etc.) block automated accessibility scanning for security reasons. If you see an injection error, this is expected and not a bug in the tool.</span>
       </p>
     </section>
     <section id="contact">
@@ -301,6 +391,31 @@
         return charsToReplace[tag] || tag;
       });
     }
+    function formatAccessibilityLog(log) {
+      const lines = log.split('\n');
+      let html = '';
+      lines.forEach(line => {
+        if (/^https?:\/\//.test(line.trim())) {
+          html += `<span class='log-url'>${escapeHtml(line.trim())}</span>`;
+        } else if (/^\s*Violations:/.test(line)) {
+          const count = parseInt(line.match(/Violations: (\d+)/)?.[1] || '0', 10);
+          html += `<span class='log-title' style='color:${count === 0 ? '#aaffaa' : '#ff8888'};'>Accessibility: ${count === 0 ? 'passed' : 'failed'} (${count} violation${count === 1 ? '' : 's'})</span>`;
+        } else if (/^\s*\[/.test(line)) {
+          html += `<span class='log-link log-fail'>${escapeHtml(line.trim())}</span>`;
+        } else if (/^\s*No accessibility violations found\./.test(line)) {
+          html += `<span class='log-link log-pass'>[PASS] No accessibility violations found.</span>`;
+        } else if (/^\s*ERROR:/.test(line)) {
+          html += `<span class='log-title log-fail'>${escapeHtml(line.trim())}</span>`;
+        } else if (/^=== Accessibility Issue Summary/.test(line)) {
+          html += `<br><span class='log-title'>${escapeHtml(line.trim())}</span><br>`;
+        } else if (/^\s*\w+:.+occurrence/.test(line)) {
+          html += `<span class='log-link log-fail'>${escapeHtml(line.trim())}</span>`;
+        } else if (line.trim() === '') {
+          html += '<br>';
+        }
+      });
+      return html;
+    }
     document.getElementById('automation-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       const urls = document.getElementById('urls').value
@@ -327,6 +442,46 @@
             const a = document.createElement('a');
             a.href = url;
             a.download = 'automation-log.txt';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            }, 100);
+          };
+        } else {
+          resultDiv.innerHTML = '<pre>' + (data.error || 'No log') + '</pre>';
+        }
+      } catch (err) {
+        resultDiv.textContent = 'Error: ' + err.message;
+      }
+    });
+    document.getElementById('accessibility-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const urls = document.getElementById('access-urls').value
+        .split('\n')
+        .map(u => u.trim())
+        .filter(u => u);
+      const resultDiv = document.getElementById('accessibility-result');
+      const downloadBtn = document.getElementById('download-access-log-btn');
+      resultDiv.textContent = 'Running accessibility check...';
+      downloadBtn.style.display = 'none';
+      try {
+        const res = await fetch('/run-accessibility', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ urls })
+        });
+        const data = await res.json();
+        if (data.log) {
+          resultDiv.innerHTML = formatAccessibilityLog(data.log);
+          downloadBtn.style.display = '';
+          downloadBtn.onclick = function() {
+            const blob = new Blob([data.log], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'accessibility-log.txt';
             document.body.appendChild(a);
             a.click();
             setTimeout(() => {

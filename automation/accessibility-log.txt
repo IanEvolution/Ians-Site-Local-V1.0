@@ -1,0 +1,36 @@
+URL: https://youtube.com
+  ERROR: Could not inject axe-core (site may block script injection): page.addScriptTag: TypeError: Failed to set the 'text' property on 'HTMLScriptElement': This document requires 'TrustedScript' assignment.
+    at addScriptContent (eval at evaluate (:313:29), <anonymous>:4:19)
+    at UtilityScript.evaluate (<anonymous>:315:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+
+URL: https://www.apple.com
+  Violations: 2
+    [color-contrast] Elements must meet minimum color contrast ratio thresholds: 2 occurrence(s)
+    [region] All page content should be contained by landmarks: 1 occurrence(s)
+
+URL: http://example.com
+  Violations: 3
+    [html-has-lang] <html> element must have a lang attribute: 1 occurrence(s)
+    [landmark-one-main] Document should have one main landmark: 1 occurrence(s)
+    [region] All page content should be contained by landmarks: 1 occurrence(s)
+
+URL: https://www.cnn.com
+  Violations: 6
+    [frame-title] Frames must have an accessible name: 1 occurrence(s)
+    [image-alt] Images must have alternative text: 1 occurrence(s)
+    [landmark-unique] Landmarks should have a unique role or role/label/title (i.e. accessible name) combination: 2 occurrence(s)
+    [link-name] Links must have discernible text: 4 occurrence(s)
+    [page-has-heading-one] Page should contain a level-one heading: 1 occurrence(s)
+    [region] All page content should be contained by landmarks: 1 occurrence(s)
+
+=== Accessibility Issue Summary Across All URLs ===
+region: 3 occurrence(s)
+color-contrast: 1 occurrence(s)
+html-has-lang: 1 occurrence(s)
+landmark-one-main: 1 occurrence(s)
+frame-title: 1 occurrence(s)
+image-alt: 1 occurrence(s)
+landmark-unique: 1 occurrence(s)
+link-name: 1 occurrence(s)
+page-has-heading-one: 1 occurrence(s)
