@@ -34,13 +34,13 @@ A modern, visually appealing portfolio website for Ian Holt, featuring a Playwri
    automation/
   playwright-ui-script.spec.js   # Playwright test script
   urls.txt                       # Input URLs (auto-managed)
-public/
+  public/
   index.html                     # Portfolio site and UI
-server.js                        # Express backend
-test-log.txt                     # Automation results (auto-generated)
-test-results/                    # Playwright output (gitignored)
-.gitignore                       # Node/Playwright best practices
-package.json                     # Dependencies
+  server.js                      # Express backend
+  test-log.txt                   # Automation results (auto-generated)
+  test-results/                  # Playwright output (gitignored)
+  .gitignore                     # Node/Playwright best practices
+  package.json                   # Dependencies
 
 ## Version Control
 All essential files are tracked in Git.
