@@ -5,7 +5,7 @@ const path = require('path');
 test.describe.configure({ mode: 'serial' });
 test.setTimeout(120000); // 2 minutes per test
 
-const urls = fs.readFileSync(path.join(__dirname, 'urls.txt'), 'utf-8')
+const urls = fs.readFileSync(path.join(__dirname, 'urls-ui.txt'), 'utf-8')
   .split('\n')
   .map(line => line.trim())
   .filter(line => line.length > 0);

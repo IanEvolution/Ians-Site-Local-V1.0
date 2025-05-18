@@ -111,22 +111,34 @@
     function formatAccessibilityLog(log) {
       const lines = log.split('\n');
       let html = '';
+      let currentSection = '';
       lines.forEach(line => {
-        if (/^https?:\/\//.test(line.trim())) {
-          html += `<span class='log-url'>${escapeHtml(line.trim())}</span>`;
-        } else if (/^\s*Violations:/.test(line)) {
-          const count = parseInt(line.match(/Violations: (\d+)/)?.[1] || '0', 10);
-          html += `<span class='log-title' style='color:${count === 0 ? '#aaffaa' : '#ff8888'};'>Accessibility: ${count === 0 ? 'passed' : 'failed'} (${count} violation${count === 1 ? '' : 's'})</span>`;
-        } else if (/^\s*\[/.test(line)) {
-          html += `<span class='log-link log-fail'>${escapeHtml(line.trim())}</span>`;
-        } else if (/^\s*No accessibility violations found\./.test(line)) {
-          html += `<span class='log-link log-pass'>[PASS] No accessibility violations found.</span>`;
-        } else if (/^\s*ERROR:/.test(line)) {
-          html += `<span class='log-title log-fail'>${escapeHtml(line.trim())}</span>`;
+        if (/^URL: /.test(line)) {
+          html += `<br><span class='log-url'>${escapeHtml(line.trim())}</span><br>`;
+        } else if (/^passed:/.test(line)) {
+          html += `<span class='log-label pass'>Passed:</span><br>`;
+          currentSection = 'passed';
+        } else if (/^failed:/.test(line)) {
+          html += `<span class='log-label fail'>Failed:</span><br>`;
+          currentSection = 'failed';
+        } else if (/^  \[.*\]/.test(line)) {
+          html += `<span class='log-link log-fail'>${escapeHtml(line.trim())}</span><br>`;
+        } else if (/^  None$/.test(line) && currentSection === 'failed') {
+          html += `<span class='log-link log-pass'>None</span><br>`;
+        } else if (/^  None$/.test(line) && currentSection === 'passed') {
+          html += `<span class='log-link log-fail'>None</span><br>`;
+        } else if (/^  [^\[]/.test(line) && currentSection === 'passed') {
+          html += `<span class='log-link log-pass'>${escapeHtml(line.trim())}</span><br>`;
+        } else if (/^    \d+\. /.test(line)) {
+          html += `<span class='log-link log-fail' style='margin-left:2em;'>${escapeHtml(line.trim())}</span><br>`;
+        } else if (/^       Failure Summary:/.test(line)) {
+          html += `<span class='log-link log-fail' style='margin-left:3em;'>${escapeHtml(line.trim())}</span><br>`;
+        } else if (/^  ERROR:/.test(line)) {
+          html += `<span class='log-title log-fail'>${escapeHtml(line.trim())}</span><br>`;
         } else if (/^=== Accessibility Issue Summary/.test(line)) {
           html += `<br><span class='log-title'>${escapeHtml(line.trim())}</span><br>`;
-        } else if (/^\s*\w+:.+occurrence/.test(line)) {
-          html += `<span class='log-link log-fail'>${escapeHtml(line.trim())}</span>`;
+        } else if (/^\w+:.+occurrence/.test(line)) {
+          html += `<span class='log-link log-fail'>${escapeHtml(line.trim())}</span><br>`;
         } else if (line.trim() === '') {
           html += '<br>';
         }
@@ -141,7 +153,7 @@
         .filter(u => u);
       const resultDiv = document.getElementById('automation-result');
       const downloadBtn = document.getElementById('download-log-btn');
-      resultDiv.textContent = 'Running automation...';
+      resultDiv.textContent = 'Running automation... Depending on the number of URLs, this may take a few minutes.';
       downloadBtn.style.display = 'none';
       try {
         const res = await fetch('/run-playwright', {
@@ -181,7 +193,7 @@
         .filter(u => u);
       const resultDiv = document.getElementById('accessibility-result');
       const downloadBtn = document.getElementById('download-access-log-btn');
-      resultDiv.textContent = 'Running accessibility check...';
+      resultDiv.textContent = 'Running accessibility check... depending on the number of URLs, this may take a few minutes.';
       downloadBtn.style.display = 'none';
       try {
         const res = await fetch('/run-accessibility', {
