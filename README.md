@@ -1,51 +1,130 @@
-# Ian Holt Evolution Portfolio
+# Ian's Local Playwright Automation & Accessibility Testing Site
 
-A modern, visually appealing portfolio website for Ian Holt, featuring a Playwright automation demo. This site is designed for recruiters, developers, and QA professionals to showcase automation skills and run real Playwright tests (including accessibility checks) on any URL.
+## Overview
+This project is a robust, local Node.js/Express web application for running Playwright-based automation and accessibility tests on any list of URLs. It features a modern, accessible frontend, unified styling, and a clean, local-only backend (no Docker or cloud dependencies). All test results and logs are returned as JSON and downloadable from the UI.
+
+---
 
 ## Features
+- **Run Playwright UI Automation**: Test multiple URLs for UI health using Playwright scripts.
+- **Run Accessibility Audits**: Test multiple URLs for accessibility issues using Playwright and Axe.
+- **Modern, Responsive UI**: Clean, accessible design with unified button styles and all CSS in `public/main.css`.
+- **Downloadable Logs**: Download test and accessibility logs directly from the UI.
+- **Local-Only**: No Docker, no cloud dependencies—runs entirely on your machine.
+- **Easy to Extend**: Add your own Playwright scripts in the `automation/` folder.
 
-- **About, Projects, and Contact**: Clean, recruiter-friendly portfolio sections.
-- **Automation Demo**:  
-  - Enter one or more URLs and trigger Playwright automation from the web UI.
-  - Checks homepage title, clicks and validates up to 20 links per page.
-  - Accessibility and error handling built in.
-  - Results are color-coded, easy to read, and downloadable.
-- **Backend**:  
-  - Node.js + Express server.
-  - Runs Playwright scripts on demand and returns results.
-- **Frontend**:  
-  - Responsive, dark-themed, and professional UI.
-  - Modern CSS, smooth UX, and clear result formatting.
+---
 
-## Quick Start
+## Prerequisites
+- [Node.js](https://nodejs.org/) (v18 or newer recommended)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
 
-1. **Install dependencies**  
-   ```sh
+---
+
+## Installation
+1. **Clone the repository**
+   ```powershell
+   git clone https://github.com/IanEvolution/Ians-Site-Local-V1.0.git
+   cd Ians-Site-Local-V1.0
+   ```
+
+2. **Install dependencies**
+   ```powershell
    npm install
-2. **Start the server**
+   ```
+
+3. **Install Playwright Browsers**
+   ```powershell
+   npx playwright install
+   ```
+
+---
+
+## Usage
+1. **Start the server**
+   ```powershell
    node server.js
-   The site will be available at http://localhost:3000.
-4. **Run an automation test**
-   Enter one or more URLs (one per line) in the Automation Demo section.
-   Click "Run Automation".
-   View and download the results.
+   ```
+   The server will start on [http://localhost:3000](http://localhost:3000).
 
-   ## Project Structure
-   automation/
-  playwright-ui-script.spec.js   # Playwright test script
-  urls.txt                       # Input URLs (auto-managed)
-  public/
-  index.html                     # Portfolio site and UI
-  server.js                      # Express backend
-  test-log.txt                   # Automation results (auto-generated)
-  test-results/                  # Playwright output (gitignored)
-  .gitignore                     # Node/Playwright best practices
-  package.json                   # Dependencies
+2. **Open the web UI**
+   - Go to [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Version Control
-All essential files are tracked in Git.
-node_modules, logs, Playwright output, and local config are ignored via .gitignore.
+3. **Run Automation or Accessibility Tests**
+   - Enter one or more URLs (one per line) in the provided textarea.
+   - Click the appropriate button to run UI automation or accessibility tests.
+   - View results in the UI and download logs as needed.
+
+---
+
+## Project Structure
+```
+├── automation/
+│   ├── Accessability-Test.spec.js      # Playwright accessibility test script
+│   ├── playwright-ui-script.spec.js    # Playwright UI automation script
+│   ├── urls.txt                        # (Ignored) Example input file for URLs
+│   ├── test-log.txt                    # (Ignored) Automation log output
+│   ├── accessibility-log.txt           # (Ignored) Accessibility log output
+│   └── reports/                        # JSON reports for each tested URL
+├── public/
+│   ├── index.html                      # Main frontend UI
+│   └── main.css                        # All CSS styles (unified, accessible)
+├── server.js                           # Express backend, runs Playwright scripts
+├── package.json                        # Project dependencies and scripts
+├── .gitignore                          # Ignores node_modules, logs, etc.
+└── README.md                           # This file
+```
+
+---
+
+## How It Works
+- **Frontend**: `public/index.html` provides a simple UI to input URLs and trigger tests. All styles are in `public/main.css`.
+- **Backend**: `server.js` exposes two endpoints:
+  - `POST /run-playwright` — Runs UI automation on provided URLs.
+  - `POST /run-accessibility` — Runs accessibility audits on provided URLs.
+- **Test Scripts**: Located in `automation/`. You can add or modify Playwright scripts as needed.
+- **Reports**: JSON reports for each URL are saved in `automation/reports/`.
+
+---
+
+## Customization
+- **Add More Playwright Tests**: Place new `.spec.js` files in `automation/` and update `server.js` to use them.
+- **Change Port**: Edit the `PORT` variable in `server.js`.
+- **Modify Styles**: Edit `public/main.css` for UI changes.
+
+---
+
+## Troubleshooting
+- **Port in Use**: Change the port in `server.js` if 3000 is busy.
+- **Playwright Errors**: Make sure browsers are installed (`npx playwright install`).
+- **No Results/Logs**: Check the server console for errors. Ensure URLs are valid and accessible.
+- **File Not Found**: Make sure you are running commands in the project root directory.
+
+---
+
+## Security & Privacy
+- This app is designed for local use only. No data is sent to any external server.
+- All logs and reports are stored locally and are ignored by `.gitignore`.
+
+---
+
+## Updating & Maintenance
+- Pull the latest changes from your repository as needed.
+- Update dependencies with `npm update`.
+- To reset logs and reports, simply delete files in `automation/reports/` and the log files.
+
+---
+
+## License
+MIT License. See [LICENSE](LICENSE) if present.
+
+---
+
+## Credits
+- Built with [Node.js](https://nodejs.org/), [Express](https://expressjs.com/), and [Playwright](https://playwright.dev/).
+- Accessibility testing powered by [axe-core](https://github.com/dequelabs/axe-core).
+
+---
 
 ## Contact
-Email: ianholt839@gmail.com
-LinkedIn: Ian Holt
+For questions or suggestions, open an issue or contact [IanEvolution](https://github.com/IanEvolution).
